@@ -1,0 +1,95 @@
+{
+  "entities": {
+    "VisitorStats": {
+      "title": "VisitorStats",
+      "description": "Aggregated website visitor statistics and milestone tracking.",
+      "type": "object",
+      "properties": {
+        "totalVisits": {
+          "type": "number",
+          "description": "Total number of page loads and visitors."
+        },
+        "lastVisitedAt": {
+          "type": "string",
+          "description": "ISO timestamp of the most recent visitor load."
+        },
+        "lastMilestone": {
+          "type": "number",
+          "description": "The latest 50-visit multiple milestone reached."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Server timestamp of the last update."
+        }
+      },
+      "required": ["totalVisits", "lastMilestone"]
+    },
+    "MilestoneLog": {
+      "title": "MilestoneLog",
+      "description": "Audit log for every 50-visit milestone reached, including email notification dispatch details.",
+      "type": "object",
+      "properties": {
+        "milestone": {
+          "type": "number",
+          "description": "The milestone visit count reached (e.g., 50, 100, 150)."
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "ISO date and time when the milestone was crossed."
+        },
+        "recipientEmail": {
+          "type": "string",
+          "description": "Destination email for notification."
+        },
+        "emailStatus": {
+          "type": "string",
+          "description": "Delivery status of the Gmail notification.",
+          "enum": ["sent", "pending_auth", "failed", "simulated"]
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional context or notes regarding this milestone."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when record was logged."
+        }
+      },
+      "required": ["milestone", "timestamp", "recipientEmail", "emailStatus"]
+    },
+    "AdminProfile": {
+      "title": "AdminProfile",
+      "description": "Trusted administrator profile for privileged access control.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Admin Google email address."
+        },
+        "role": {
+          "type": "string",
+          "description": "User role."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Account registration timestamp."
+        }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/visitorStats/{statId}": {
+      "schema": "VisitorStats",
+      "description": "Public visitor counter document for the living archive."
+    },
+    "/milestoneLogs/{milestoneId}": {
+      "schema": "MilestoneLog",
+      "description": "Chronological audit logs of 50-visitor milestone achievements and email records."
+    },
+    "/admins/{adminId}": {
+      "schema": "AdminProfile",
+      "description": "Admin authorization records for verified administrators."
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Stassen's Collection of Ingredients",
+  "description": "A premium, editorial culinary ingredient archive featuring high-resolution AI-generated specimen imagery, global terroir mapping, seasonal storytelling narratives, Firestore visitor tracking, and automated Gmail milestone alerts.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,24 @@
+# Robots.txt for Stassen's Collection of Ingredients
+# Host: https://stassen-collection-of-ingredients.skushekana.workers.dev
+
+User-agent: *
+Allow: /
+Allow: /collection
+Allow: /recipes
+Allow: /recipes/
+Allow: /locations
+Allow: /calendar
+Allow: /what-can-i-cook
+Allow: /about
+Allow: /contact
+Allow: /privacy
+Allow: /ingredients/
+
+# Non-indexable / transient client utilities
+Disallow: /api/
+Disallow: /search
+Disallow: /pantry
+Disallow: /shopping-list
+Disallow: /admin/
+
+Sitemap: https://stassen-collection-of-ingredients.skushekana.workers.dev/sitemap.xml

@@ -1,0 +1,77 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all unknown paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAuthorizedAdmin() {
+      return isSignedIn() &&
+        request.auth.token.email_verified == true &&
+        (request.auth.token.email == 'skushekana@gmail.com' || exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidVisitorStats(data) {
+      return data.totalVisits is number &&
+        data.totalVisits >= 0 &&
+        data.lastMilestone is number &&
+        data.lastMilestone >= 0 &&
+        (!('lastVisitedAt' in data) || (data.lastVisitedAt is string && data.lastVisitedAt.size() <= 100)) &&
+        (!('updatedAt' in data) || (data.updatedAt is string && data.updatedAt.size() <= 100));
+    }
+
+    function isValidMilestoneLog(data) {
+      return data.milestone is number &&
+        data.milestone >= 0 &&
+        data.timestamp is string &&
+        data.timestamp.size() <= 100 &&
+        data.recipientEmail is string &&
+        data.recipientEmail.size() <= 200 &&
+        data.emailStatus is string &&
+        data.emailStatus in ['sent', 'pending_auth', 'failed', 'simulated'] &&
+        (!('notes' in data) || (data.notes is string && data.notes.size() <= 1000)) &&
+        (!('createdAt' in data) || (data.createdAt is string && data.createdAt.size() <= 100));
+    }
+
+    // Visitor Stats Collection (Public Read, Public Increment)
+    match /visitorStats/{statId} {
+      allow get: if isValidId(statId);
+      allow list: if true;
+      allow create: if isValidId(statId) && isValidVisitorStats(request.resource.data);
+      allow update: if isValidId(statId) && isValidVisitorStats(request.resource.data) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['totalVisits', 'lastVisitedAt', 'lastMilestone', 'updatedAt']);
+      allow delete: if isAuthorizedAdmin();
+    }
+
+    // Milestone Logs (Creation on milestone cross, Read/Manage restricted to Admin)
+    match /milestoneLogs/{milestoneId} {
+      allow get: if isValidId(milestoneId) && (isAuthorizedAdmin() || true);
+      allow list: if isAuthorizedAdmin();
+      allow create: if isValidId(milestoneId) && isValidMilestoneLog(request.resource.data);
+      allow update, delete: if isAuthorizedAdmin();
+    }
+
+    // Adsterra Smart Ads Settings Collection (Public Read, Admin Write)
+    match /adSettings/{settingId} {
+      allow get: if isValidId(settingId);
+      allow list: if true;
+      allow create, update, delete: if isAuthorizedAdmin();
+    }
+
+    // Admins Collection (Strict Admin Privileges)
+    match /admins/{adminId} {
+      allow read, write: if isAuthorizedAdmin() && isValidId(adminId);
+    }
+  }
+}

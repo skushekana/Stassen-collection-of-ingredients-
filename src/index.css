@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-display: 'Cinzel', 'Cormorant Garamond', Georgia, serif;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #121212;
+    color: #F5F5F0;
+  }
+
+  h1, h2, h3, .font-serif {
+    font-family: var(--font-serif);
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+  }
+}
+
+/* Sophisticated Dark scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #121212;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #252525;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #C5A059;
+}
+
+/* Subtle grain overlay */
+.bg-grain {
+  background-image: radial-gradient(rgba(245, 245, 240, 0.02) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Accessibility Mode Overrides */
+html.high-contrast-mode {
+  --tw-bg-opacity: 1;
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+html.high-contrast-mode .bg-\[\#121212\],
+html.high-contrast-mode .bg-\[\#181818\],
+html.high-contrast-mode .bg-\[\#1A1A1A\],
+html.high-contrast-mode .bg-\[\#1E1E1E\],
+html.high-contrast-mode .bg-\[\#202020\],
+html.high-contrast-mode .bg-\[\#252525\] {
+  background-color: #0A0A0A !important;
+  border-color: #D4AF37 !important;
+}
+
+html.high-contrast-mode p,
+html.high-contrast-mode span,
+html.high-contrast-mode button,
+html.high-contrast-mode div {
+  color: #FFFFFF !important;
+}
+
+html.high-contrast-mode .text-\[\#C5A059\],
+html.high-contrast-mode .text-emerald-400,
+html.high-contrast-mode .text-amber-400 {
+  color: #FFD700 !important;
+}
+
+html.text-scale-large {
+  font-size: 115%;
+}
+
+html.text-scale-xlarge {
+  font-size: 130%;
+}
+
+html.font-dyslexic-mode,
+html.font-dyslexic-mode * {
+  font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif !important;
+  letter-spacing: 0.05em !important;
+  word-spacing: 0.1em !important;
+  line-height: 1.75 !important;
+}
+
+html.reduce-motion-mode *,
+html.reduce-motion-mode *::before,
+html.reduce-motion-mode *::after {
+  animation-duration: 0.001s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001s !important;
+  scroll-behavior: auto !important;
+}
+
+
+
